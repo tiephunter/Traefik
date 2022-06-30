@@ -1,0 +1,47 @@
+# http routing section
+[http]
+  [http.routers]
+     # Define a connection between requests and services
+     [http.routers.to-product]
+      rule = "Path(`/product`)"
+
+      # If the rule matches, forward to the whoami service (declared below)
+      service = "product"
+      
+     # Define a connection between requests and services
+     [http.routers.to-order]
+      rule = "Path(`/order`)"
+
+      # If the rule matches, forward to the whoami service (declared below)
+      service = "order"
+      
+     # Define a connection between requests and services
+     [http.routers.to-ship]
+      rule = "Path(`/ship`)"
+
+      # If the rule matches, forward to the whoami service (declared below)
+      service = "ship"
+
+    [http.services.product]
+      # Define how to reach an existing service on our infrastructure
+      [http.services.product.loadBalancer]
+        [[http.services.product.loadBalancer.servers]]
+          url = "http://localhost:9001"
+
+     	 [[http.services.product.loadBalancer.servers]]
+          url = "http://localhost:9002"
+ 
+      	 [[http.services.product.loadBalancer.servers]]
+          url = "http://localhost:9003"
+           
+	[[http.services.product.loadBalancer.servers]]
+          url = "http://localhost:9004"
+           
+      	[http.services.product.loadBalancer.healthCheck]
+   	 path = "/product"
+     	 interval = "10s"
+      	 timeout = "3s"
+      	 count = 3
+
+
+
